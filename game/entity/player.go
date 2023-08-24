@@ -1,12 +1,14 @@
 package entity
 
 import (
+	"image/color"
+
 	"github.com/batariloa/lino/resources"
-	"github.com/batariloa/lino/utils"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-const baseModelSize = 9
+const baseModelSize = 15
 
 type Player struct {
 	Health        int
@@ -28,7 +30,21 @@ func NewPlayer(health int, speed float64, posX float64, posY float64) *Player {
 }
 
 func (p *Player) Draw(screen *ebiten.Image) {
-	utils.ScaleImage(p, screen)
+
+	ebitenutil.DrawCircle(screen, p.PositionX, p.PositionY, baseModelSize, color.Opaque)
+
+	op := ebiten.DrawImageOptions{}
+	faceImage := p.GetVisual()
+
+	scalingFactorX := baseModelSize / float64(faceImage.Bounds().Dx())
+	scalingFactorY := baseModelSize / float64(faceImage.Bounds().Dy())
+
+	op.GeoM.Scale(scalingFactorX, scalingFactorY)
+	op.GeoM.Translate(p.GetPositionX()-baseModelSize/2, p.GetPositionY()-baseModelSize/2)
+
+	op.Filter = ebiten.FilterLinear
+	screen.DrawImage(faceImage, &op)
+
 	p.positionXPrev = p.PositionX
 }
 
