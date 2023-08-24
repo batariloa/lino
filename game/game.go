@@ -2,18 +2,17 @@ package game
 
 import (
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/utils"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-)
-
-const (
-	ScreenWidth  int = 320
-	ScreenHeight int = 240
 )
 
 type Game struct {
-	Player *entity.Player
+	Player     *entity.Player
+	mapManager *level.Map
+}
+
+func StartLevelOne(game *ebiten.Game) {
 }
 
 func NewGame(p *entity.Player) *Game {
@@ -30,12 +29,14 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DebugPrint(screen, "Lino, where are you going?")
 
+	tiler := level.NewTiler()
+	mapManager := level.NewMapManager(tiler, screen)
+
+	mapManager.GenerateLevelOne()
 	g.Player.Draw(screen)
-
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return ScreenWidth, ScreenHeight
+	return level.ScreenWidth, level.ScreenHeight
 }
