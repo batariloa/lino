@@ -29,7 +29,7 @@ func NewPlayer(health int, speed float64, posX float64, posY float64) *Player {
 	}
 }
 
-func (p *Player) Draw(screen *ebiten.Image) {
+func (p *Player) DrawPlayerModel(screen *ebiten.Image) {
 
 	ebitenutil.DrawCircle(screen, p.PositionX, p.PositionY, BaseModelSize, color.Opaque)
 

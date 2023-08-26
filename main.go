@@ -14,10 +14,10 @@ func main() {
 
 	resources.LoadResources()
 
-	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowSize(480, 480)
 	ebiten.SetWindowTitle("Lino Walks Alone")
 
-	player := entity.NewPlayer(100, 3, 30, 180)
+	player := entity.NewPlayer(100, 2, 30, 180)
 	tiler := level.NewTiler()
 	game := game.NewGame(player, tiler)
 

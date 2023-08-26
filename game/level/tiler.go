@@ -23,6 +23,8 @@ const (
 type Tiler struct {
 	level          [][]int
 	screen         *ebiten.Image
+	OffsetX        float64
+	OffsetY        float64
 	MaxLevelWidth  int
 	MaxLevelHeight int
 }
@@ -43,31 +45,38 @@ func init() {
 	tilesImage = ebiten.NewImageFromImage(img)
 }
 
-func (t *Tiler) DrawTiles(screen *ebiten.Image, p *entity.Player) {
+func (tl *Tiler) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 
 	halfScreenWidth := float64(ScreenWidth / 2)
 	halfScreenHeight := float64(ScreenHeight / 2)
 
-	offsetX := 0.0
+	tl.OffsetX = 0.0
 	if p.PositionX > halfScreenWidth {
-		offsetX = p.PositionX - halfScreenWidth
+		if p.PositionX+halfScreenWidth < float64(tl.MaxLevelWidth) {
+			tl.OffsetX = p.PositionX - halfScreenWidth
+		} else {
+			tl.OffsetX = float64(tl.MaxLevelWidth - ScreenWidth)
+		}
 	}
-
-	offsetY := 0.0
+	tl.OffsetY = 0.0
 	if p.PositionY > halfScreenHeight {
-		offsetY = p.PositionY - halfScreenHeight
+		if p.PositionY+halfScreenHeight < float64(tl.MaxLevelHeight) {
+			tl.OffsetY = p.PositionY - halfScreenHeight
+		} else {
+			tl.OffsetY = float64(tl.MaxLevelHeight - ScreenHeight)
+		}
 	}
 
 	w := tilesImage.Bounds().Dx()
 	tileXCount := w / tileSize
 
 	const xCount = ScreenWidth / tileSize
-	for _, l := range t.level {
+	for _, l := range tl.level {
 		for i, t := range l {
 			op := &ebiten.DrawImageOptions{}
 			op.GeoM.Translate(
-				float64((i%xCount)*tileSize)-offsetX,
-				float64((i/xCount)*tileSize)-offsetY)
+				float64((i%xCount)*tileSize)-tl.OffsetX,
+				float64((i/xCount)*tileSize)-tl.OffsetY)
 
 			sx := (t % tileXCount) * tileSize
 			sy := (t / tileXCount) * tileSize
@@ -94,10 +103,21 @@ func (t *Tiler) GenerateLevelOne() {
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
+			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
+			243, 218, 243, 243, 243, 243, 243, 243, 243, 243, 243, 244, 243, 243, 243,
+
+			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
+			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
+			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 			243, 218, 243, 243, 243, 243, 243, 243, 243, 243, 243, 244, 243, 243, 243,
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 		},
 		{
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 51, 52, 53, 54, 55, 56, 0, 0, 0, 0,
@@ -115,7 +135,20 @@ func (t *Tiler) GenerateLevelOne() {
 			0, 0, 0, 0, 0, 0, 0, 245, 242, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 245, 242, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 245, 242, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		},
 	}
+
+	t.MaxLevelWidth = 15 * tileSize
+	t.MaxLevelHeight = 20 * tileSize
 	//TODO add set max height and width
+
 }
