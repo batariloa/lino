@@ -1,20 +1,23 @@
 package level
 
 import (
+	"github.com/batariloa/lino/game/entity"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Map struct {
 	screen *ebiten.Image
+	player *entity.Player
 	layer  [][]int
 	tiler  *Tiler
 }
 
-func NewMapManager(tiler *Tiler, screen *ebiten.Image) *Map {
+func NewMapManager(tiler *Tiler, screen *ebiten.Image, p *entity.Player) *Map {
 
 	return &Map{
 		tiler:  tiler,
 		screen: screen,
+		player: p,
 	}
 }
 
@@ -61,5 +64,5 @@ func (m *Map) GenerateLevelOne() {
 		},
 	}
 
-	m.tiler.DrawTiles(m.screen, m.layer)
+	m.tiler.DrawTiles(m.screen, m.layer, m.player)
 }

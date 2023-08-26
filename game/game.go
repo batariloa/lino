@@ -3,20 +3,20 @@ package game
 import (
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/game/level"
-	"github.com/batariloa/lino/utils"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Game struct {
-	Player     *entity.Player
-	mapManager *level.Map
+	Player *entity.Player
+	Tiler  *level.Tiler
 }
 
 func StartLevelOne(game *ebiten.Game) {
 }
 
-func NewGame(p *entity.Player) *Game {
+func NewGame(p *entity.Player, t *level.Tiler) *Game {
 
+	t.GenerateLevelOne()
 	return &Game{
 		Player: p,
 	}
@@ -24,14 +24,31 @@ func NewGame(p *entity.Player) *Game {
 
 func (g *Game) Update() error {
 
-	utils.SetupPlayerControls(g.Player)
+	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
+
+		if g.Player.PositionX > g.Player.GetBaseModelSize() {
+			g.Player.MoveLeft()
+		}
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
+		g.Player.MoveRight()
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
+		g.Player.MoveUp()
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
+		g.Player.MoveDown()
+	}
+
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 
-	tiler := level.NewTiler()
-	mapManager := level.NewMapManager(tiler, screen)
+	mapManager := level.NewMapManager(g.Tiler, screen, g.Player)
 
 	mapManager.GenerateLevelOne()
 	g.Player.Draw(screen)

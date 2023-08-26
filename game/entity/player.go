@@ -8,7 +8,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-const baseModelSize = 15
+const BaseModelSize = 15
 
 type Player struct {
 	Health        int
@@ -31,16 +31,16 @@ func NewPlayer(health int, speed float64, posX float64, posY float64) *Player {
 
 func (p *Player) Draw(screen *ebiten.Image) {
 
-	ebitenutil.DrawCircle(screen, p.PositionX, p.PositionY, baseModelSize, color.Opaque)
+	ebitenutil.DrawCircle(screen, p.PositionX, p.PositionY, BaseModelSize, color.Opaque)
 
 	op := ebiten.DrawImageOptions{}
 	faceImage := p.GetVisual()
 
-	scalingFactorX := baseModelSize / float64(faceImage.Bounds().Dx())
-	scalingFactorY := baseModelSize / float64(faceImage.Bounds().Dy())
+	scalingFactorX := BaseModelSize / float64(faceImage.Bounds().Dx())
+	scalingFactorY := BaseModelSize / float64(faceImage.Bounds().Dy())
 
 	op.GeoM.Scale(scalingFactorX, scalingFactorY)
-	op.GeoM.Translate(p.GetPositionX()-baseModelSize/2, p.GetPositionY()-baseModelSize/2)
+	op.GeoM.Translate(p.GetPositionX()-BaseModelSize/2, p.GetPositionY()-BaseModelSize/2)
 
 	op.Filter = ebiten.FilterLinear
 	screen.DrawImage(faceImage, &op)
@@ -69,7 +69,7 @@ func (p *Player) GetVisual() *ebiten.Image {
 }
 
 func (p *Player) GetBaseModelSize() float64 {
-	return baseModelSize
+	return BaseModelSize
 }
 
 func (p *Player) MoveLeft() {
