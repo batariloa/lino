@@ -13,8 +13,8 @@ const BaseModelSize = 15
 type Player struct {
 	Health        int
 	Speed         float64
-	PositionX     float64
 	positionXPrev float64
+	PositionX     float64
 	PositionY     float64
 }
 
@@ -29,18 +29,23 @@ func NewPlayer(health int, speed float64, posX float64, posY float64) *Player {
 	}
 }
 
-func (p *Player) DrawPlayerModel(screen *ebiten.Image) {
-
-	ebitenutil.DrawCircle(screen, p.PositionX, p.PositionY, BaseModelSize, color.Opaque)
+func (p *Player) DrawPlayerModel(screen *ebiten.Image, offsetX float64, offsetY float64) {
 
 	op := ebiten.DrawImageOptions{}
 	faceImage := p.GetVisual()
+
+	ebitenutil.DrawCircle(
+		screen,
+		p.PositionX-offsetX,
+		p.PositionY-offsetY,
+		BaseModelSize,
+		color.Opaque)
 
 	scalingFactorX := BaseModelSize / float64(faceImage.Bounds().Dx())
 	scalingFactorY := BaseModelSize / float64(faceImage.Bounds().Dy())
 
 	op.GeoM.Scale(scalingFactorX, scalingFactorY)
-	op.GeoM.Translate(p.GetPositionX()-BaseModelSize/2, p.GetPositionY()-BaseModelSize/2)
+	op.GeoM.Translate(p.PositionX-BaseModelSize/2, p.PositionY-BaseModelSize/2-float64(offsetY))
 
 	op.Filter = ebiten.FilterLinear
 	screen.DrawImage(faceImage, &op)
