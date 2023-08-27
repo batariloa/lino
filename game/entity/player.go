@@ -38,6 +38,7 @@ func (p *Player) GetVisual() *ebiten.Image {
 
 	if p.PositionX > p.PositionXPrev {
 		return resources.GetFaceImageRight()
+
 	}
 	if p.PositionX < p.PositionXPrev {
 		return resources.GetFaceImageLeft()

@@ -8,8 +8,8 @@ import (
 	"log"
 
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/resources"
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/examples/resources/images"
 	"github.com/hajimehoshi/ebiten/v2/vector"
 )
 
@@ -19,10 +19,10 @@ const (
 )
 
 const (
-	tileSize = 16
+	tileSize = 20
 )
 
-type Tiler struct {
+type Drawer struct {
 	level          [][]int
 	screen         *ebiten.Image
 	OffsetX        float64
@@ -35,19 +35,19 @@ var (
 	tilesImage *ebiten.Image
 )
 
-func NewTiler() *Tiler {
-	return &Tiler{}
+func NewTiler() *Drawer {
+	return &Drawer{}
 }
 
 func init() {
-	img, _, err := image.Decode(bytes.NewReader(images.Tiles_png))
+	img, _, err := image.Decode(bytes.NewReader(resources.TileArtBytes))
 	if err != nil {
 		log.Fatal(err)
 	}
 	tilesImage = ebiten.NewImageFromImage(img)
 }
 
-func (tl *Tiler) DrawTiles(screen *ebiten.Image, p *entity.Player) {
+func (tl *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 
 	halfScreenWidth := float64(ScreenWidth / 2)
 	halfScreenHeight := float64(ScreenHeight / 2)
@@ -90,7 +90,7 @@ func (tl *Tiler) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 	}
 }
 
-func (d *Tiler) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
+func (d *Drawer) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
 
 	op := ebiten.DrawImageOptions{}
 	faceImage := p.GetVisual()
@@ -115,10 +115,10 @@ func (d *Tiler) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
 	p.PositionXPrev = p.PositionX
 }
 
-func (t *Tiler) GenerateLevelOne() {
+func (t *Drawer) GenerateLevelOne() {
 	t.level = [][]int{
 		{
-			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
+			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 1, 0,
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 			243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243, 243,
 			243, 218, 243, 243, 243, 243, 243, 243, 243, 243, 243, 218, 243, 244, 243, 243, 244, 243,
@@ -150,8 +150,8 @@ func (t *Tiler) GenerateLevelOne() {
 		},
 		{
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 51, 52, 53, 54, 55, 56, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0, 0, 76, 77, 78, 79, 80, 81, 0, 0, 0, 0,

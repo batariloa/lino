@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"io/ioutil"
 	"log"
 
 	"github.com/batariloa/lino/const"
@@ -9,10 +10,19 @@ import (
 )
 
 var (
+	TileArtBytes   []byte
 	faceImageFront *ebiten.Image
 	faceImageLeft  *ebiten.Image
 	faceImageRight *ebiten.Image
 )
+
+func init() {
+	var err error
+	TileArtBytes, err = ioutil.ReadFile(artPath.TileArt)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func LoadResources() error {
 	var err error
@@ -27,6 +37,7 @@ func LoadResources() error {
 	}
 
 	faceImageRight, _, err = ebitenutil.NewImageFromFile(artPath.FaceRight)
+
 	if err != nil {
 		log.Printf("Error loading resources: %s", err)
 	}

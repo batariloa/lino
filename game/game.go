@@ -10,13 +10,13 @@ import (
 
 type Game struct {
 	Player *entity.Player
-	Tiler  *level.Tiler
+	Tiler  *level.Drawer
 }
 
 func StartLevelOne(game *ebiten.Game) {
 }
 
-func NewGame(p *entity.Player, t *level.Tiler) *Game {
+func NewGame(p *entity.Player, t *level.Drawer) *Game {
 
 	t.GenerateLevelOne()
 	return &Game{
