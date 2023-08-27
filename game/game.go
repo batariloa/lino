@@ -47,7 +47,7 @@ func (g *Game) Update() error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Tiler.MaxLevelHeight) {
+		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Tiler.MaxLevelWidth) {
 			g.Player.MoveDown()
 		}
 	}
@@ -60,7 +60,7 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	g.Tiler.DrawTiles(screen, g.Player)
-	g.Player.DrawPlayerModel(screen, g.Tiler.OffsetX, g.Tiler.OffsetY)
+	g.Tiler.DrawPlayerModel(screen, g.Player)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
