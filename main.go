@@ -11,14 +11,13 @@ import (
 )
 
 func main() {
-
 	resources.LoadResources()
 
-	ebiten.SetWindowSize(480, 480)
+	ebiten.SetWindowSize(680, 680)
 	ebiten.SetWindowTitle("Lino Walks Alone")
 
 	player := entity.NewPlayer(100, 2, 30, 180)
-	tiler := level.NewTiler()
+	tiler := level.NewDrawer()
 	game := game.NewGame(player, tiler)
 
 	if err := ebiten.RunGame(game); err != nil {

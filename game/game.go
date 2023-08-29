@@ -10,18 +10,14 @@ import (
 
 type Game struct {
 	Player *entity.Player
-	Tiler  *level.Drawer
-}
-
-func StartLevelOne(game *ebiten.Game) {
+	Drawer *level.Drawer
 }
 
 func NewGame(p *entity.Player, t *level.Drawer) *Game {
 
-	t.GenerateLevelOne()
 	return &Game{
 		Player: p,
-		Tiler:  t,
+		Drawer: t,
 	}
 }
 
@@ -35,7 +31,7 @@ func (g *Game) Update() error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		if g.Player.PositionX+g.Player.GetBaseModelSize() < float64(g.Tiler.MaxLevelWidth) {
+		if g.Player.PositionX+g.Player.GetBaseModelSize() < float64(g.Drawer.Holder.MaxLevelWidth) {
 			g.Player.MoveRight()
 		}
 	}
@@ -47,20 +43,20 @@ func (g *Game) Update() error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Tiler.MaxLevelWidth) {
+		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Drawer.Holder.MaxLevelHeight) {
 			g.Player.MoveDown()
 		}
 	}
 
 	log.Printf("Current position: %f", g.Player.PositionX)
 	log.Printf("Current position Y: %f", g.Player.PositionY)
-	log.Printf("Current position Y offset: %f", g.Tiler.OffsetX)
+	log.Printf("Current position Y offset: %f", g.Drawer.OffsetY)
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.Tiler.DrawTiles(screen, g.Player)
-	g.Tiler.DrawPlayerModel(screen, g.Player)
+	g.Drawer.DrawTiles(screen, g.Player)
+	g.Drawer.DrawPlayerModel(screen, g.Player)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

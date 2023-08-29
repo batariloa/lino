@@ -5,7 +5,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-const BaseModelSize = 15
+const BaseModelSize = 16
 
 type Player struct {
 	Health        int
