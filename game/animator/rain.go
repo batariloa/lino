@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+const (
+	startRainFrame = 379
+)
+
 type RainAnimator struct {
 	Timer *int
 	mu    sync.Mutex
@@ -17,8 +21,7 @@ func NewRainAnimator() *RainAnimator {
 	}
 }
 
-func (a *RainAnimator) Animate(frameToBeDrawn *int) {
-
+func (a *RainAnimator) StartTimer() {
 	ticker := time.NewTicker(100 * time.Millisecond)
 	defer ticker.Stop()
 
@@ -29,32 +32,11 @@ func (a *RainAnimator) Animate(frameToBeDrawn *int) {
 			*a.Timer = 1
 		}
 		a.mu.Unlock()
-
-		*frameToBeDrawn = a.chooseFrame()
 	}
 }
 
-func (a *RainAnimator) chooseFrame() int {
-
-	switch *a.Timer {
-
-	case 1:
-		return 380
-	case 2:
-		return 381
-	case 3:
-		return 382
-	case 4:
-		return 383
-	case 5:
-		return 384
-	case 6:
-		return 385
-	case 7:
-		return 386
-	case 8:
-		return 387
-	default:
-		return 0
-	}
+func (a *RainAnimator) CurrentRainFrame() int {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+	return startRainFrame + *a.Timer
 }

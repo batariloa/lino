@@ -7,6 +7,7 @@ import (
 	_ "image/png"
 	"log"
 
+	"github.com/batariloa/lino/game/animator"
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/resources"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -23,10 +24,11 @@ const (
 )
 
 type Drawer struct {
-	Holder  *LevelHolder
-	screen  *ebiten.Image
-	OffsetX float64
-	OffsetY float64
+	Holder       *LevelHolder
+	RainAnimator *animator.RainAnimator
+	screen       *ebiten.Image
+	OffsetX      float64
+	OffsetY      float64
 }
 
 var (
@@ -34,8 +36,11 @@ var (
 )
 
 func NewDrawer() *Drawer {
+	ra := animator.NewRainAnimator()
+	go ra.StartTimer()
 	drawer := &Drawer{
-		Holder: NewLevelHolder(),
+		Holder:       NewLevelHolder(),
+		RainAnimator: ra,
 	}
 
 	drawer.Holder.GenerateLevelOne()
@@ -50,48 +55,63 @@ func init() {
 		log.Fatal(err)
 	}
 	tilesImage = ebiten.NewImageFromImage(img)
-
 }
 
-func (tl *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
-
+func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 	halfScreenWidth := float64(ScreenWidth / 2)
 	halfScreenHeight := float64(ScreenHeight / 2)
 
-	tl.OffsetX = 0.0
+	d.OffsetX = 0.0
 	if p.PositionX > halfScreenWidth {
-		if p.PositionX+halfScreenWidth < float64(tl.Holder.MaxLevelWidth) {
-			tl.OffsetX = p.PositionX - halfScreenWidth
+		if p.PositionX+halfScreenWidth < float64(d.Holder.MaxLevelWidth) {
+			d.OffsetX = p.PositionX - halfScreenWidth
 		} else {
-			tl.OffsetX = float64(tl.Holder.MaxLevelWidth - ScreenWidth)
+			d.OffsetX = float64(d.Holder.MaxLevelWidth - ScreenWidth)
 		}
 	}
 
-	tl.OffsetY = 0.0
+	d.OffsetY = 0.0
 	if p.PositionY > halfScreenHeight {
-		if p.PositionY+halfScreenHeight < float64(tl.Holder.MaxLevelHeight) {
-			tl.OffsetY = p.PositionY - halfScreenHeight
+		if p.PositionY+halfScreenHeight < float64(d.Holder.MaxLevelHeight) {
+			d.OffsetY = p.PositionY - halfScreenHeight
 		} else {
-			tl.OffsetY = float64(tl.Holder.MaxLevelHeight - ScreenHeight)
+			d.OffsetY = float64(d.Holder.MaxLevelHeight - ScreenHeight)
 		}
 	}
-
-	log.Printf("Position X overflow %f", tl.OffsetX)
 
 	w := tilesImage.Bounds().Dx()
 	tileXCount := w / tileSize
 
-	var xCount = tl.Holder.MaxLevelWidth / tileSize
-	for _, l := range tl.Holder.Level {
+	var xCount = d.Holder.MaxLevelWidth / tileSize
+	for _, l := range d.Holder.Level {
 		for i, t := range l {
-			op := &ebiten.DrawImageOptions{}
-			op.GeoM.Translate(
-				float64((i%xCount)*tileSize)-tl.OffsetX,
-				float64((i/xCount)*tileSize)-tl.OffsetY)
 
-			sx := (t % tileXCount) * tileSize
-			sy := (t / tileXCount) * tileSize
-			screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
+			if t > 379 && t < 400 {
+
+				op := &ebiten.DrawImageOptions{}
+				op.GeoM.Translate(
+					float64((i%xCount)*tileSize)-d.OffsetX,
+					float64((i/xCount)*tileSize)-d.OffsetY)
+
+				currentRainFrame := d.RainAnimator.CurrentRainFrame()
+				log.Printf("Current rainf rame %d", currentRainFrame)
+
+				sx := (currentRainFrame % tileXCount) * tileSize
+				sy := (currentRainFrame / tileXCount) * tileSize
+				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
+
+			} else {
+
+				op := &ebiten.DrawImageOptions{}
+				op.GeoM.Translate(
+					float64((i%xCount)*tileSize)-d.OffsetX,
+					float64((i/xCount)*tileSize)-d.OffsetY)
+
+				sx := (t % tileXCount) * tileSize
+				sy := (t / tileXCount) * tileSize
+				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
+
+			}
 		}
 	}
 }
@@ -113,7 +133,9 @@ func (d *Drawer) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
 	scalingFactorY := p.GetBaseModelSize() / float64(faceImage.Bounds().Dy())
 
 	op.GeoM.Scale(scalingFactorX, scalingFactorY)
-	op.GeoM.Translate(p.PositionX-p.GetBaseModelSize()/2-d.OffsetX, p.PositionY-p.GetBaseModelSize()/2-d.OffsetY)
+	op.GeoM.Translate(
+		p.PositionX-p.GetBaseModelSize()/2-d.OffsetX,
+		p.PositionY-p.GetBaseModelSize()/2-d.OffsetY)
 
 	op.Filter = ebiten.FilterLinear
 	screen.DrawImage(faceImage, &op)
