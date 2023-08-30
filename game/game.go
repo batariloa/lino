@@ -4,16 +4,16 @@ import (
 	"log"
 
 	"github.com/batariloa/lino/game/entity"
-	"github.com/batariloa/lino/game/level"
+	"github.com/batariloa/lino/game/view"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 type Game struct {
 	Player *entity.Player
-	Drawer *level.Drawer
+	Drawer *view.Drawer
 }
 
-func NewGame(p *entity.Player, t *level.Drawer) *Game {
+func NewGame(p *entity.Player, t *view.Drawer) *Game {
 
 	return &Game{
 		Player: p,
@@ -60,5 +60,5 @@ func (g *Game) Draw(screen *ebiten.Image) {
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return level.ScreenWidth, level.ScreenHeight
+	return view.ScreenWidth, view.ScreenHeight
 }

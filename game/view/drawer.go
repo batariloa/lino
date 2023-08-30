@@ -1,4 +1,4 @@
-package level
+package view
 
 import (
 	"bytes"
@@ -9,6 +9,7 @@ import (
 
 	"github.com/batariloa/lino/game/animator"
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/resources"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -24,7 +25,7 @@ const (
 )
 
 type Drawer struct {
-	Holder       *LevelHolder
+	Holder       *level.LevelHolder
 	RainAnimator *animator.RainAnimator
 	screen       *ebiten.Image
 	OffsetX      float64
@@ -39,7 +40,7 @@ func NewDrawer() *Drawer {
 	ra := animator.NewRainAnimator()
 	go ra.StartTimer()
 	drawer := &Drawer{
-		Holder:       NewLevelHolder(),
+		Holder:       level.NewLevelHolder(),
 		RainAnimator: ra,
 	}
 
@@ -82,30 +83,19 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 	w := tilesImage.Bounds().Dx()
 	tileXCount := w / tileSize
 
-	var xCount = d.Holder.MaxLevelWidth / tileSize
+	var totalTileCount = d.Holder.MaxLevelWidth / tileSize
 	for _, l := range d.Holder.Level {
 		for i, t := range l {
 
 			if t > 379 && t < 400 {
 
-				op := &ebiten.DrawImageOptions{}
-				op.GeoM.Translate(
-					float64((i%xCount)*tileSize)-d.OffsetX,
-					float64((i/xCount)*tileSize)-d.OffsetY)
-
-				currentRainFrame := d.RainAnimator.CurrentRainFrame()
-				log.Printf("Current rainf rame %d", currentRainFrame)
-
-				sx := (currentRainFrame % tileXCount) * tileSize
-				sy := (currentRainFrame / tileXCount) * tileSize
-				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
-
+				d.drawRainTile(i, tileXCount, totalTileCount, screen)
 			} else {
 
 				op := &ebiten.DrawImageOptions{}
 				op.GeoM.Translate(
-					float64((i%xCount)*tileSize)-d.OffsetX,
-					float64((i/xCount)*tileSize)-d.OffsetY)
+					float64((i%totalTileCount)*tileSize)-d.OffsetX,
+					float64((i/totalTileCount)*tileSize)-d.OffsetY)
 
 				sx := (t % tileXCount) * tileSize
 				sy := (t / tileXCount) * tileSize
@@ -114,6 +104,21 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 			}
 		}
 	}
+}
+
+func (d *Drawer) drawRainTile(i, tileXCount, totalTileCount int, screen *ebiten.Image) {
+
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Translate(
+		float64((i%totalTileCount)*tileSize)-d.OffsetX,
+		float64((i/totalTileCount)*tileSize)-d.OffsetY)
+
+	currentRainFrame := d.RainAnimator.CurrentRainFrame()
+	log.Printf("Current rainf rame %d", currentRainFrame)
+
+	sx := (currentRainFrame % tileXCount) * tileSize
+	sy := (currentRainFrame / tileXCount) * tileSize
+	screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
 }
 
 func (d *Drawer) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
