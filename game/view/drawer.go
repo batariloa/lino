@@ -21,7 +21,7 @@ const (
 )
 
 const (
-	tileSize = 20
+	TileSize = 20
 )
 
 type Drawer struct {
@@ -81,9 +81,9 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 	}
 
 	w := tilesImage.Bounds().Dx()
-	tileXCount := w / tileSize
+	tileXCount := w / TileSize
 
-	var totalTileCount = d.Holder.MaxLevelWidth / tileSize
+	var totalTileCount = d.Holder.MaxLevelWidth / TileSize
 	for _, l := range d.Holder.Level {
 		for i, t := range l {
 
@@ -94,12 +94,12 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
 
 				op := &ebiten.DrawImageOptions{}
 				op.GeoM.Translate(
-					float64((i%totalTileCount)*tileSize)-d.OffsetX,
-					float64((i/totalTileCount)*tileSize)-d.OffsetY)
+					float64((i%totalTileCount)*TileSize)-d.OffsetX,
+					float64((i/totalTileCount)*TileSize)-d.OffsetY)
 
-				sx := (t % tileXCount) * tileSize
-				sy := (t / tileXCount) * tileSize
-				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
+				sx := (t % tileXCount) * TileSize
+				sy := (t / tileXCount) * TileSize
+				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+TileSize, sy+TileSize)).(*ebiten.Image), op)
 
 			}
 		}
@@ -110,15 +110,15 @@ func (d *Drawer) drawRainTile(i, tileXCount, totalTileCount int, screen *ebiten.
 
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(
-		float64((i%totalTileCount)*tileSize)-d.OffsetX,
-		float64((i/totalTileCount)*tileSize)-d.OffsetY)
+		float64((i%totalTileCount)*TileSize)-d.OffsetX,
+		float64((i/totalTileCount)*TileSize)-d.OffsetY)
 
 	currentRainFrame := d.RainAnimator.CurrentRainFrame()
 	log.Printf("Current rainf rame %d", currentRainFrame)
 
-	sx := (currentRainFrame % tileXCount) * tileSize
-	sy := (currentRainFrame / tileXCount) * tileSize
-	screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+tileSize, sy+tileSize)).(*ebiten.Image), op)
+	sx := (currentRainFrame % tileXCount) * TileSize
+	sy := (currentRainFrame / tileXCount) * TileSize
+	screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+TileSize, sy+TileSize)).(*ebiten.Image), op)
 }
 
 func (d *Drawer) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {

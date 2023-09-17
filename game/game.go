@@ -1,9 +1,8 @@
 package game
 
 import (
-	"log"
-
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/view"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -25,7 +24,12 @@ func (g *Game) Update() error {
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
 
-		if g.Player.PositionX > g.Player.GetBaseModelSize() {
+		leftTile := g.Drawer.Holder.GetTileAtPos(int(g.Player.GetPositionX())-view.TileSize, int(g.Player.GetPositionY()), view.TileSize)
+
+		isNoPassTile := level.IsNoPassTile(leftTile)
+
+		if !isNoPassTile &&
+			g.Player.PositionX > g.Player.GetBaseModelSize() {
 			g.Player.MoveLeft()
 		}
 	}
@@ -48,9 +52,6 @@ func (g *Game) Update() error {
 		}
 	}
 
-	log.Printf("Current position: %f", g.Player.PositionX)
-	log.Printf("Current position Y: %f", g.Player.PositionY)
-	log.Printf("Current position Y offset: %f", g.Drawer.OffsetY)
 	return nil
 }
 
