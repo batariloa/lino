@@ -37,7 +37,7 @@ func (a *RainAnimator) StartTimer() {
 
 		// Update rain frames for each tile
 		for tileID := range a.RainFrames {
-			a.RainFrames[tileID] = (a.RainFrames[tileID] + 1) % 20
+			a.RainFrames[tileID] = (a.RainFrames[tileID] + 1) % 9
 		}
 
 		a.mu.Unlock()

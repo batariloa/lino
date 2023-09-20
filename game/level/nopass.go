@@ -17,10 +17,8 @@ func init() {
 }
 
 func IsNoPassTile(tileId int) bool {
-
 	if noPassTiles[tileId] {
 		return true
 	}
-
 	return false
 }
