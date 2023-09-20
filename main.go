@@ -5,6 +5,7 @@ import (
 
 	"github.com/batariloa/lino/game"
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/view"
 	"github.com/batariloa/lino/resources"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -18,7 +19,9 @@ func main() {
 
 	player := entity.NewPlayer(100, 2, 30, 180)
 	tiler := view.NewDrawer()
-	game := game.NewGame(player, tiler)
+	holder := level.NewLevelHolder()
+	game := game.NewGame(player, tiler, holder)
+	game.Holder.GenerateLevelOne()
 
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)

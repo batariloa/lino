@@ -9,7 +9,7 @@ import (
 
 	"github.com/batariloa/lino/game/animator"
 	"github.com/batariloa/lino/game/entity"
-	"github.com/batariloa/lino/game/level"
+	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/resources"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -25,7 +25,6 @@ const (
 )
 
 type Drawer struct {
-	Holder       *level.LevelHolder
 	RainAnimator *animator.RainAnimator
 	screen       *ebiten.Image
 	OffsetX      float64
@@ -40,11 +39,8 @@ func NewDrawer() *Drawer {
 	ra := animator.NewRainAnimator()
 	go ra.StartTimer()
 	drawer := &Drawer{
-		Holder:       level.NewLevelHolder(),
 		RainAnimator: ra,
 	}
-
-	drawer.Holder.GenerateLevelOne()
 
 	return drawer
 }
@@ -58,33 +54,33 @@ func init() {
 	tilesImage = ebiten.NewImageFromImage(img)
 }
 
-func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player) {
+func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.LevelInfo) {
 	halfScreenWidth := float64(ScreenWidth / 2)
 	halfScreenHeight := float64(ScreenHeight / 2)
 
 	d.OffsetX = 0.0
 	if p.PositionX > halfScreenWidth {
-		if p.PositionX+halfScreenWidth < float64(d.Holder.MaxLevelWidth) {
+		if p.PositionX+halfScreenWidth < float64(li.MaxLevelWidth) {
 			d.OffsetX = p.PositionX - halfScreenWidth
 		} else {
-			d.OffsetX = float64(d.Holder.MaxLevelWidth - ScreenWidth)
+			d.OffsetX = float64(li.MaxLevelWidth - ScreenWidth)
 		}
 	}
 
 	d.OffsetY = 0.0
 	if p.PositionY > halfScreenHeight {
-		if p.PositionY+halfScreenHeight < float64(d.Holder.MaxLevelHeight) {
+		if p.PositionY+halfScreenHeight < float64(li.MaxLevelHeight) {
 			d.OffsetY = p.PositionY - halfScreenHeight
 		} else {
-			d.OffsetY = float64(d.Holder.MaxLevelHeight - ScreenHeight)
+			d.OffsetY = float64(li.MaxLevelHeight - ScreenHeight)
 		}
 	}
 
 	w := tilesImage.Bounds().Dx()
 	tileXCount := w / TileSize
 
-	var totalTileCount = d.Holder.MaxLevelWidth / TileSize
-	for _, l := range d.Holder.Level {
+	var totalTileCount = li.MaxLevelWidth / TileSize
+	for _, l := range li.Level {
 		for i, t := range l {
 
 			if t > 379 && t < 400 {

@@ -3,6 +3,7 @@ package game
 import (
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/game/level"
+	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
 	"github.com/hajimehoshi/ebiten/v2"
 )
@@ -10,13 +11,15 @@ import (
 type Game struct {
 	Player *entity.Player
 	Drawer *view.Drawer
+	Holder *level.LevelHolder
 }
 
-func NewGame(p *entity.Player, t *view.Drawer) *Game {
+func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
 
 	return &Game{
 		Player: p,
 		Drawer: t,
+		Holder: h,
 	}
 }
 
@@ -24,7 +27,7 @@ func (g *Game) Update() error {
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
 
-		leftTile := g.Drawer.Holder.GetTileAtPos(int(g.Player.GetPositionX())-view.TileSize, int(g.Player.GetPositionY()), view.TileSize)
+		leftTile := g.Holder.GetTileAtPos(int(g.Player.GetPositionX())-view.TileSize, int(g.Player.GetPositionY()), view.TileSize)
 
 		isNoPassTile := level.IsNoPassTile(leftTile)
 
@@ -35,7 +38,7 @@ func (g *Game) Update() error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		if g.Player.PositionX+g.Player.GetBaseModelSize() < float64(g.Drawer.Holder.MaxLevelWidth) {
+		if g.Player.PositionX+g.Player.GetBaseModelSize() < float64(g.Holder.MaxLevelWidth) {
 			g.Player.MoveRight()
 		}
 	}
@@ -47,7 +50,7 @@ func (g *Game) Update() error {
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Drawer.Holder.MaxLevelHeight) {
+		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Holder.MaxLevelHeight) {
 			g.Player.MoveDown()
 		}
 	}
@@ -56,7 +59,12 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.Drawer.DrawTiles(screen, g.Player)
+	li := model.LevelInfo{
+		MaxLevelWidth:  g.Holder.MaxLevelWidth,
+		MaxLevelHeight: g.Holder.MaxLevelHeight,
+		Level:          g.Holder.Level,
+	}
+	g.Drawer.DrawTiles(screen, g.Player, li)
 	g.Drawer.DrawPlayerModel(screen, g.Player)
 }
 
