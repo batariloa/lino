@@ -17,7 +17,7 @@ func main() {
 	ebiten.SetWindowSize(680, 680)
 	ebiten.SetWindowTitle("Lino Walks Alone")
 
-	player := entity.NewPlayer(100, 2, 30, 180)
+	player := entity.NewPlayer(100, 2, 90, 180)
 	tiler := view.NewDrawer()
 	holder := level.NewLevelHolder()
 	game := game.NewGame(player, tiler, holder)

@@ -1,6 +1,7 @@
 package game
 
 import (
+	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
@@ -12,6 +13,7 @@ type Game struct {
 	Player *entity.Player
 	Drawer *view.Drawer
 	Holder *level.LevelHolder
+	pc     *controller.PlayerController
 }
 
 func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
@@ -20,39 +22,30 @@ func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
 		Player: p,
 		Drawer: t,
 		Holder: h,
+		pc:     controller.NewPlayerController(),
 	}
 }
 
 func (g *Game) Update() error {
 
+	if ebiten.IsKeyPressed(ebiten.KeyE) {
+
+	}
+
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-
-		leftTile := g.Holder.GetTileAtPos(int(g.Player.GetPositionX())-view.TileSize, int(g.Player.GetPositionY()), view.TileSize)
-
-		isNoPassTile := level.IsNoPassTile(leftTile)
-
-		if !isNoPassTile &&
-			g.Player.PositionX > g.Player.GetBaseModelSize() {
-			g.Player.MoveLeft()
-		}
+		g.pc.MoveLeft(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		if g.Player.PositionX+g.Player.GetBaseModelSize() < float64(g.Holder.MaxLevelWidth) {
-			g.Player.MoveRight()
-		}
+		g.pc.MoveRight(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		if g.Player.PositionY > g.Player.GetBaseModelSize() {
-			g.Player.MoveUp()
-		}
+		g.pc.MoveUp(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		if g.Player.PositionY+g.Player.GetBaseModelSize() < float64(g.Holder.MaxLevelHeight) {
-			g.Player.MoveDown()
-		}
+		g.pc.MoveDown(g.Player, g.Holder, view.TileSize)
 	}
 
 	return nil

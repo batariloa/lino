@@ -1,7 +1,10 @@
 package level
 
+import "github.com/batariloa/lino/game/entity"
+
 type LevelHolder struct {
 	Level          [][]int
+	Interactables  []int
 	MaxLevelWidth  int
 	MaxLevelHeight int
 }
@@ -29,6 +32,22 @@ func (h *LevelHolder) GetTileAtPos(x, y, tileSize int) int {
 	return h.Level[0][index]
 }
 
+func (h *LevelHolder) GetTileLeft(p *entity.Player, tileSize int) int {
+	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+}
+
+func (h *LevelHolder) GetTileRight(p *entity.Player, tileSize int) int {
+	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+}
+
+func (h *LevelHolder) GetTileTop(p *entity.Player, tileSize int) int {
+	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+}
+
+func (h *LevelHolder) GetTileBottom(p *entity.Player, tileSize int) int {
+	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+}
+
 func (h *LevelHolder) GenerateLevelOne() {
 	h.Level = [][]int{
 
@@ -46,7 +65,9 @@ func (h *LevelHolder) GenerateLevelOne() {
 			63, 62, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 63, 40,
 			63, 62, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 45, 43, 63, 40,
 			63, 62, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 63, 40,
-			63, 62, 43, 43, 43, 45, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 63, 40,
+			63, 62, 43, 43, 43, 45, 43, 43, 66, 41, 41, 41, 41, 41, 41, 41, 40, 40,
+
+			63, 62, 43, 43, 43, 45, 43, 43, 63, 40, 40, 40, 40, 40, 40, 40, 40, 40,
 		},
 
 		{
@@ -59,14 +80,47 @@ func (h *LevelHolder) GenerateLevelOne() {
 			63, 62, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 63, 40,
 			63, 62, 42, 42, 42, 42, 42, 44, 42, 42, 42, 42, 42, 42, 42, 42, 63, 40,
 			63, 62, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 63, 40,
+		},
 
-			63, 62, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 63, 40,
-			63, 62, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 45, 43, 63, 40,
-			63, 62, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 42, 63, 40,
-			63, 62, 43, 43, 43, 45, 43, 43, 43, 43, 43, 43, 43, 43, 43, 43, 63, 40,
+		{
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0, 67, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+			0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		},
 	}
 
+	h.Interactables = []int{
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	}
+
 	h.MaxLevelWidth = 18 * 20
-	h.MaxLevelHeight = 12 * 20
+	h.MaxLevelHeight = 13 * 20
 }
