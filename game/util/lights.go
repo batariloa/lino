@@ -7,7 +7,7 @@ func SwitchLightOn(level *[][]int) {
 
 	for i := range (*level)[0] {
 		//dark shade
-		newLayer[i] = 398
+		newLayer[i] = 399
 	}
 
 	*level = append(*level, newLayer)

@@ -78,27 +78,37 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.Leve
 
 	w := tilesImage.Bounds().Dx()
 	tileXCount := w / TileSize
+	totalTileCount := li.MaxLevelWidth / TileSize
 
-	var totalTileCount = li.MaxLevelWidth / TileSize
-	for _, l := range li.Level {
-		for i, t := range l {
-
-			if t > 379 && t < 400 {
-
-				d.drawRainTile(i, tileXCount, totalTileCount, screen)
-			} else {
-
-				op := &ebiten.DrawImageOptions{}
-				op.GeoM.Translate(
-					float64((i%totalTileCount)*TileSize)-d.OffsetX,
-					float64((i/totalTileCount)*TileSize)-d.OffsetY)
-
-				sx := (t % tileXCount) * TileSize
-				sy := (t / tileXCount) * TileSize
-				screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+TileSize, sy+TileSize)).(*ebiten.Image), op)
-
-			}
+	// Draw the first two layers.
+	for layerIndex := 0; layerIndex < 2 && layerIndex < len(li.Level); layerIndex++ {
+		for i, t := range li.Level[layerIndex] {
+			drawTile(i, t, tileXCount, totalTileCount, screen, d)
 		}
+	}
+
+	d.DrawPlayerModel(screen, p)
+
+	// Draw the rest of the layers.
+	for layerIndex := 2; layerIndex < len(li.Level); layerIndex++ {
+		for i, t := range li.Level[layerIndex] {
+			drawTile(i, t, tileXCount, totalTileCount, screen, d)
+		}
+	}
+}
+
+func drawTile(i, t, tileXCount, totalTileCount int, screen *ebiten.Image, d *Drawer) {
+	if t > 379 && t < 387 {
+		d.drawRainTile(i, tileXCount, totalTileCount, screen)
+	} else {
+		op := &ebiten.DrawImageOptions{}
+		op.GeoM.Translate(
+			float64((i%totalTileCount)*TileSize)-d.OffsetX,
+			float64((i/totalTileCount)*TileSize)-d.OffsetY)
+
+		sx := (t % tileXCount) * TileSize
+		sy := (t / tileXCount) * TileSize
+		screen.DrawImage(tilesImage.SubImage(image.Rect(sx, sy, sx+TileSize, sy+TileSize)).(*ebiten.Image), op)
 	}
 }
 

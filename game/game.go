@@ -11,25 +11,29 @@ import (
 )
 
 type Game struct {
-	Player *entity.Player
-	Drawer *view.Drawer
-	Holder *level.LevelHolder
-	pc     *controller.PlayerController
+	Player    *entity.Player
+	Drawer    *view.Drawer
+	Holder    *level.LevelHolder
+	KeyStates *controller.KeyStates
+	pc        *controller.PlayerController
 }
 
 func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
 
 	return &Game{
-		Player: p,
-		Drawer: t,
-		Holder: h,
-		pc:     controller.NewPlayerController(),
+		Player:    p,
+		Drawer:    t,
+		Holder:    h,
+		KeyStates: controller.NewKeyStates(),
+		pc:        controller.NewPlayerController(),
 	}
 }
 
 func (g *Game) Update() error {
 
-	if ebiten.IsKeyPressed(ebiten.KeyE) {
+	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
+
+	if eKeyIsPressed && !g.KeyStates.PrevEKeyState {
 		interactor.HandlePlayerInteractions(g.Player, g.Holder)
 	}
 
@@ -49,6 +53,8 @@ func (g *Game) Update() error {
 		g.pc.MoveDown(g.Player, g.Holder, view.TileSize)
 	}
 
+	g.KeyStates.PrevEKeyState = eKeyIsPressed
+
 	return nil
 }
 
@@ -59,7 +65,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		Level:          g.Holder.Level,
 	}
 	g.Drawer.DrawTiles(screen, g.Player, li)
-	g.Drawer.DrawPlayerModel(screen, g.Player)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

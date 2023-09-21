@@ -5,7 +5,7 @@ import "github.com/batariloa/lino/game/entity"
 type LevelHolder struct {
 	Level          [][]int
 	Interactables  []int
-	Status         Status
+	Status         *Status
 	MaxLevelWidth  int
 	MaxLevelHeight int
 }
@@ -16,40 +16,74 @@ func NewLevelHolder() *LevelHolder {
 }
 
 func (h *LevelHolder) GetTileAtPos(x, y, tileSize int) int {
-	// Convert pixel values to map coordinates.
 	xPos := x / tileSize
 	yPos := y / tileSize
 
-	// Calculate width in terms of tiles.
 	width := h.MaxLevelWidth / tileSize
 
-	// Ensure the position is within the bounds of the map.
 	if xPos < 0 || yPos < 0 || xPos >= width || yPos*width+xPos >= len(h.Level[0]) {
-		return 0 // some default value indicating no tile or error.
+		return 0
 	}
 
 	// Convert 2D coordinates to 1D index.
 	index := yPos*width + xPos
 	return h.Level[0][index]
 }
-
 func (h *LevelHolder) GetTileLeft(p *entity.Player, tileSize int) int {
-	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	return h.GetTileAtPos(int(p.GetPositionX())-tileSize, int(p.GetPositionY()), tileSize)
 }
 
 func (h *LevelHolder) GetTileRight(p *entity.Player, tileSize int) int {
-	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	return h.GetTileAtPos(int(p.GetPositionX())+tileSize, int(p.GetPositionY()), tileSize)
 }
 
 func (h *LevelHolder) GetTileTop(p *entity.Player, tileSize int) int {
-	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	return h.GetTileAtPos(int(p.GetPositionX()), int(p.GetPositionY())-tileSize, tileSize)
 }
 
 func (h *LevelHolder) GetTileBottom(p *entity.Player, tileSize int) int {
-	return h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	return h.GetTileAtPos(int(p.GetPositionX()), int(p.GetPositionY())+tileSize, tileSize)
+}
+
+func (h *LevelHolder) GetInteractionLeft(p *entity.Player, tileSize int) int {
+	return h.GetInteractionAtPos(int(p.GetPositionX())-tileSize, int(p.GetPositionY()), tileSize)
+}
+
+func (h *LevelHolder) GetInteractionRight(p *entity.Player, tileSize int) int {
+	return h.GetInteractionAtPos(int(p.GetPositionX())+tileSize, int(p.GetPositionY()), tileSize)
+}
+
+func (h *LevelHolder) GetInteractionTop(p *entity.Player, tileSize int) int {
+	return h.GetInteractionAtPos(int(p.GetPositionX()), int(p.GetPositionY())-tileSize, tileSize)
+}
+
+func (h *LevelHolder) GetInteractionBottom(p *entity.Player, tileSize int) int {
+	return h.GetInteractionAtPos(int(p.GetPositionX()), int(p.GetPositionY())+tileSize, tileSize)
+}
+
+func (h *LevelHolder) GetInteractionAtPos(x, y, tileSize int) int {
+	xPos := x / tileSize
+	yPos := y / tileSize
+
+	width := h.MaxLevelWidth / tileSize
+
+	if xPos < 0 || yPos < 0 || xPos >= width || yPos*width+xPos >= len(h.Level[0]) {
+		return 0
+	}
+
+	// Convert 2D coordinates to 1D index.
+	index := yPos*width + xPos
+	return h.Interactables[index]
 }
 
 func (h *LevelHolder) GenerateLevelOne() {
+
+	LightOn := true
+
+	h.Status = &Status{
+		LightOn: &LightOn,
+	}
+
 	h.Level = [][]int{
 
 		{
@@ -108,16 +142,17 @@ func (h *LevelHolder) GenerateLevelOne() {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	}
