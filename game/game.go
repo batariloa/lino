@@ -3,6 +3,7 @@ package game
 import (
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
+	"github.com/batariloa/lino/game/interactor"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
@@ -29,7 +30,7 @@ func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
 func (g *Game) Update() error {
 
 	if ebiten.IsKeyPressed(ebiten.KeyE) {
-
+		interactor.HandlePlayerInteractions(g.Player, g.Holder)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {

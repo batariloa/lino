@@ -5,6 +5,7 @@ import "github.com/batariloa/lino/game/entity"
 type LevelHolder struct {
 	Level          [][]int
 	Interactables  []int
+	Status         Status
 	MaxLevelWidth  int
 	MaxLevelHeight int
 }

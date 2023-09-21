@@ -6,7 +6,11 @@ import (
 	"github.com/batariloa/lino/game/view"
 )
 
-type InteractFunc func()
+func HandlePlayerInteractions(p *entity.Player, h *level.LevelHolder) {
+
+	interactions := findNearInteractables(p, h)
+	handleInteractCodes(&interactions, h)
+}
 
 func findNearInteractables(p *entity.Player, h *level.LevelHolder) []int {
 
@@ -29,4 +33,11 @@ func findNearInteractables(p *entity.Player, h *level.LevelHolder) []int {
 	}
 
 	return result
+}
+
+func handleInteractCodes(c *[]int, h *level.LevelHolder) {
+
+	for code := range *c {
+		executeInteraction(code, h)
+	}
 }
