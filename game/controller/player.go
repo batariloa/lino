@@ -13,7 +13,7 @@ func NewPlayerController() *PlayerController {
 
 func (*PlayerController) MoveLeft(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
-	leftTile := h.GetTileAtPos(int(p.GetPositionX())-int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	leftTile := h.GetTileAtPos(p.GetPositionX()-float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(leftTile)
 
 	if !isNoPassTile &&
@@ -24,7 +24,7 @@ func (*PlayerController) MoveLeft(p *entity.Player, h *level.LevelHolder, tileSi
 
 func (*PlayerController) MoveRight(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
-	rightTile := h.GetTileAtPos(int(p.GetPositionX())+int(p.GetBaseModelSize()), int(p.GetPositionY()), tileSize)
+	rightTile := h.GetTileAtPos(p.GetPositionX()+float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(rightTile)
 
 	if !isNoPassTile &&
@@ -35,7 +35,7 @@ func (*PlayerController) MoveRight(p *entity.Player, h *level.LevelHolder, tileS
 
 func (*PlayerController) MoveUp(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
-	topTile := h.GetTileAtPos(int(p.GetPositionX()), int(p.GetPositionY())-int(p.GetBaseModelSize()), tileSize)
+	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()-float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 
 	if !isNoPassTile {
@@ -45,7 +45,7 @@ func (*PlayerController) MoveUp(p *entity.Player, h *level.LevelHolder, tileSize
 
 func (*PlayerController) MoveDown(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
-	topTile := h.GetTileAtPos(int(p.GetPositionX()), int(p.GetPositionY())+int(p.GetBaseModelSize()), tileSize)
+	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 	if !isNoPassTile &&
 		p.PositionY+p.GetBaseModelSize() < float64(h.MaxLevelHeight) {

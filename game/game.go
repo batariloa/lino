@@ -62,7 +62,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	li := model.LevelInfo{
 		MaxLevelWidth:  g.Holder.MaxLevelWidth,
 		MaxLevelHeight: g.Holder.MaxLevelHeight,
-		Level:          g.Holder.Level,
+		Level:          *g.Holder.Level,
 	}
 	g.Drawer.DrawTiles(screen, g.Player, li)
 }

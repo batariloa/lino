@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/batariloa/lino/game/level"
+	"github.com/batariloa/lino/game/model"
 )
 
 var InteractionMap map[int]InteractFunc
@@ -13,11 +14,12 @@ func init() {
 	InteractionMap[1] = interactLightSwitch
 }
 
-func executeInteraction(code int, h *level.LevelHolder) {
+func executeInteraction(ti model.TileInteraction, h *level.LevelHolder) {
 
-	log.Printf("Trying to execute interactor with code %d", code)
+	log.Printf("Trying to execute interactor with code %d", ti.Code)
+	log.Println("Execute receives pos %d", ti.PosX)
 
-	if f, ok := InteractionMap[code]; ok && f != nil {
-		f(h)
+	if f, ok := InteractionMap[ti.Code]; ok && f != nil {
+		f(ti, h)
 	}
 }
