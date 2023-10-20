@@ -3,7 +3,7 @@ package game
 import (
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
-	"github.com/batariloa/lino/game/interactor"
+	"github.com/batariloa/lino/game/interactables"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
@@ -11,30 +11,36 @@ import (
 )
 
 type Game struct {
-	Player    *entity.Player
-	Drawer    *view.Drawer
-	Holder    *level.LevelHolder
-	KeyStates *controller.KeyStates
-	pc        *controller.PlayerController
+	Player     *entity.Player
+	Drawer     *view.Drawer
+	Holder     *level.LevelHolder
+	Interactor *interactables.Interactor
+	KeyStates  *controller.KeyStates
+	pc         *controller.PlayerController
 }
 
-func NewGame(p *entity.Player, t *view.Drawer, h *level.LevelHolder) *Game {
+func NewGame(p *entity.Player, d *view.Drawer, h *level.LevelHolder, i *interactables.Interactor) *Game {
+
+	level.NewLevelOne(h)
 
 	return &Game{
-		Player:    p,
-		Drawer:    t,
-		Holder:    h,
-		KeyStates: controller.NewKeyStates(),
-		pc:        controller.NewPlayerController(),
+		Player:     p,
+		Drawer:     d,
+		Holder:     h,
+		Interactor: i,
+		KeyStates:  controller.NewKeyStates(),
+		pc:         controller.NewPlayerController(),
 	}
 }
 
 func (g *Game) Update() error {
 
+	g.Interactor.HandlePlayerTriggers(g.Holder, g.Player)
+
 	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
 
 	if eKeyIsPressed && !g.KeyStates.PrevEKeyState {
-		interactor.HandlePlayerInteractions(g.Player, g.Holder)
+		g.Interactor.HandlePlayerInteractions(g.Player, g.Holder)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
