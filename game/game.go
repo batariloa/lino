@@ -3,7 +3,7 @@ package game
 import (
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
-	"github.com/batariloa/lino/game/interactables"
+	interact "github.com/batariloa/lino/game/interactables"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
@@ -11,55 +11,49 @@ import (
 )
 
 type Game struct {
-	Player     *entity.Player
-	Drawer     *view.Drawer
-	Holder     *level.LevelHolder
-	Interactor *interactables.Interactor
-	KeyStates  *controller.KeyStates
-	pc         *controller.PlayerController
+	Player *entity.Player
+	Drawer *view.Drawer
+	Holder *level.LevelHolder
 }
 
-func NewGame(p *entity.Player, d *view.Drawer, h *level.LevelHolder, i *interactables.Interactor) *Game {
+func NewGame(p *entity.Player, d *view.Drawer, h *level.LevelHolder) *Game {
 
 	level.NewLevelOne(h)
 
 	return &Game{
-		Player:     p,
-		Drawer:     d,
-		Holder:     h,
-		Interactor: i,
-		KeyStates:  controller.NewKeyStates(),
-		pc:         controller.NewPlayerController(),
+		Player: p,
+		Drawer: d,
+		Holder: h,
 	}
 }
 
 func (g *Game) Update() error {
 
-	g.Interactor.HandlePlayerTriggers(g.Holder, g.Player)
+	interact.HandlePlayerTriggers(g.Holder, g.Player)
 
 	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
 
-	if eKeyIsPressed && !g.KeyStates.PrevEKeyState {
-		g.Interactor.HandlePlayerInteractions(g.Player, g.Holder)
+	if eKeyIsPressed && !controller.PrevEKeyState {
+		interact.HandlePlayerInteractions(g.Player, g.Holder)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-		g.pc.MoveLeft(g.Player, g.Holder, view.TileSize)
+		controller.MoveLeft(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		g.pc.MoveRight(g.Player, g.Holder, view.TileSize)
+		controller.MoveRight(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		g.pc.MoveUp(g.Player, g.Holder, view.TileSize)
+		controller.MoveUp(g.Player, g.Holder, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		g.pc.MoveDown(g.Player, g.Holder, view.TileSize)
+		controller.MoveDown(g.Player, g.Holder, view.TileSize)
 	}
 
-	g.KeyStates.PrevEKeyState = eKeyIsPressed
+	controller.PrevEKeyState = eKeyIsPressed
 
 	return nil
 }

@@ -5,7 +5,6 @@ import (
 
 	"github.com/batariloa/lino/game"
 	"github.com/batariloa/lino/game/entity"
-	"github.com/batariloa/lino/game/interactables"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/view"
 	"github.com/batariloa/lino/resources"
@@ -22,10 +21,7 @@ func main() {
 	tiler := view.NewDrawer()
 	holder := level.NewLevelHolder()
 
-	iexecutor := interactables.NewInteractablExecutor()
-	interactor := interactables.NewInteractor(iexecutor)
-
-	game := game.NewGame(player, tiler, holder, interactor)
+	game := game.NewGame(player, tiler, holder)
 
 	if err := ebiten.RunGame(game); err != nil {
 		log.Fatal(err)

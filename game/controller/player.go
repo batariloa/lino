@@ -5,13 +5,9 @@ import (
 	"github.com/batariloa/lino/game/level"
 )
 
-type PlayerController struct{}
+var PrevEKeyState bool
 
-func NewPlayerController() *PlayerController {
-	return &PlayerController{}
-}
-
-func (*PlayerController) MoveLeft(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveLeft(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
 	leftTile := h.GetTileAtPos(p.GetPositionX()-float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(leftTile)
@@ -22,7 +18,7 @@ func (*PlayerController) MoveLeft(p *entity.Player, h *level.LevelHolder, tileSi
 	}
 }
 
-func (*PlayerController) MoveRight(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveRight(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
 	rightTile := h.GetTileAtPos(p.GetPositionX()+float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(rightTile)
@@ -33,7 +29,7 @@ func (*PlayerController) MoveRight(p *entity.Player, h *level.LevelHolder, tileS
 	}
 }
 
-func (*PlayerController) MoveUp(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveUp(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
 	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()-float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
@@ -43,7 +39,7 @@ func (*PlayerController) MoveUp(p *entity.Player, h *level.LevelHolder, tileSize
 	}
 }
 
-func (*PlayerController) MoveDown(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveDown(p *entity.Player, h *level.LevelHolder, tileSize int) {
 
 	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
