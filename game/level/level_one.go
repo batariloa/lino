@@ -3,23 +3,23 @@ package level
 type LevelOne struct {
 }
 
-func NewLevelOne(h *LevelHolder) *LevelOne {
+func NewLevelOne() *LevelOne {
 
 	one := LevelOne{}
-	one.GenerateMap(h)
+	one.GenerateMap()
 
 	return &one
 }
 
-func (*LevelOne) GenerateMap(h *LevelHolder) {
+func (*LevelOne) GenerateMap() {
 
 	LightOn := true
 
-	h.Status = &Status{
+	LevelStatus = &Status{
 		LightOn: &LightOn,
 	}
 
-	h.Level = &[][]int{
+	LevelMap = &[][]int{
 
 		{
 			63, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40,
@@ -72,7 +72,7 @@ func (*LevelOne) GenerateMap(h *LevelHolder) {
 		},
 	}
 
-	h.Interactables = []int{
+	Interactables = []int{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -91,7 +91,7 @@ func (*LevelOne) GenerateMap(h *LevelHolder) {
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	}
 
-	h.Triggers = []int{
+	Triggers = []int{
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -110,6 +110,6 @@ func (*LevelOne) GenerateMap(h *LevelHolder) {
 		0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	}
 
-	h.MaxLevelWidth = 18 * 20
-	h.MaxLevelHeight = 13 * 20
+	MaxLevelWidth = 18 * 20
+	MaxLevelHeight = 13 * 20
 }

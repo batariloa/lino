@@ -3,7 +3,7 @@ package game
 import (
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
-	interact "github.com/batariloa/lino/game/interactables"
+	interact "github.com/batariloa/lino/game/interact"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
@@ -13,44 +13,42 @@ import (
 type Game struct {
 	Player *entity.Player
 	Drawer *view.Drawer
-	Holder *level.LevelHolder
 }
 
-func NewGame(p *entity.Player, d *view.Drawer, h *level.LevelHolder) *Game {
+func NewGame(p *entity.Player, d *view.Drawer) *Game {
 
-	level.NewLevelOne(h)
+	level.NewLevelOne()
 
 	return &Game{
 		Player: p,
 		Drawer: d,
-		Holder: h,
 	}
 }
 
 func (g *Game) Update() error {
 
-	interact.HandlePlayerTriggers(g.Holder, g.Player)
+	interact.HandlePlayerTriggers(g.Player)
 
 	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
 
 	if eKeyIsPressed && !controller.PrevEKeyState {
-		interact.HandlePlayerInteractions(g.Player, g.Holder)
+		interact.HandlePlayerInteractions(g.Player)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowLeft) {
-		controller.MoveLeft(g.Player, g.Holder, view.TileSize)
+		controller.MoveLeft(g.Player, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowRight) {
-		controller.MoveRight(g.Player, g.Holder, view.TileSize)
+		controller.MoveRight(g.Player, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowUp) {
-		controller.MoveUp(g.Player, g.Holder, view.TileSize)
+		controller.MoveUp(g.Player, view.TileSize)
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyArrowDown) {
-		controller.MoveDown(g.Player, g.Holder, view.TileSize)
+		controller.MoveDown(g.Player, view.TileSize)
 	}
 
 	controller.PrevEKeyState = eKeyIsPressed
@@ -60,9 +58,9 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	li := model.LevelInfo{
-		MaxLevelWidth:  g.Holder.MaxLevelWidth,
-		MaxLevelHeight: g.Holder.MaxLevelHeight,
-		Level:          *g.Holder.Level,
+		MaxLevelWidth:  level.MaxLevelWidth,
+		MaxLevelHeight: level.MaxLevelHeight,
+		Level:          *level.LevelMap,
 	}
 	g.Drawer.DrawTiles(screen, g.Player, li)
 }

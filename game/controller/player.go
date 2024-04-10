@@ -7,9 +7,9 @@ import (
 
 var PrevEKeyState bool
 
-func MoveLeft(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveLeft(p *entity.Player, tileSize int) {
 
-	leftTile := h.GetTileAtPos(p.GetPositionX()-float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
+	leftTile := level.GetTileAtPos(p.GetPositionX()-float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(leftTile)
 
 	if !isNoPassTile &&
@@ -18,20 +18,20 @@ func MoveLeft(p *entity.Player, h *level.LevelHolder, tileSize int) {
 	}
 }
 
-func MoveRight(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveRight(p *entity.Player, tileSize int) {
 
-	rightTile := h.GetTileAtPos(p.GetPositionX()+float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
+	rightTile := level.GetTileAtPos(p.GetPositionX()+float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(rightTile)
 
 	if !isNoPassTile &&
-		float64(h.MaxLevelWidth-int(p.GetBaseModelSize())) > p.PositionX {
+		float64(level.MaxLevelWidth-int(p.GetBaseModelSize())) > p.PositionX {
 		p.MoveRight()
 	}
 }
 
-func MoveUp(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveUp(p *entity.Player, tileSize int) {
 
-	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()-float64(p.GetBaseModelSize()), tileSize)
+	topTile := level.GetTileAtPos(p.GetPositionX(), p.GetPositionY()-float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 
 	if !isNoPassTile {
@@ -39,12 +39,12 @@ func MoveUp(p *entity.Player, h *level.LevelHolder, tileSize int) {
 	}
 }
 
-func MoveDown(p *entity.Player, h *level.LevelHolder, tileSize int) {
+func MoveDown(p *entity.Player, tileSize int) {
 
-	topTile := h.GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(p.GetBaseModelSize()), tileSize)
+	topTile := level.GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 	if !isNoPassTile &&
-		p.PositionY+p.GetBaseModelSize() < float64(h.MaxLevelHeight) {
+		p.PositionY+p.GetBaseModelSize() < float64(level.MaxLevelHeight) {
 		p.MoveDown()
 	}
 }
