@@ -1,6 +1,8 @@
 package game
 
 import (
+	"fmt"
+
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
 	interact "github.com/batariloa/lino/game/interact"
@@ -8,6 +10,7 @@ import (
 	"github.com/batariloa/lino/game/model"
 	"github.com/batariloa/lino/game/view"
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 type Game struct {
@@ -57,12 +60,23 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+
 	li := model.LevelInfo{
 		MaxLevelWidth:  level.MaxLevelWidth,
 		MaxLevelHeight: level.MaxLevelHeight,
 		Level:          *level.LevelMap,
 	}
 	g.Drawer.DrawTiles(screen, g.Player, li)
+
+	width := level.MaxLevelWidth / view.TileSize
+	triggerIndex := g.Player.PositionY*float64(width) + g.Player.PositionX
+
+	debugText := fmt.Sprintf("Pixel X %f Y %f", g.Player.PositionX, g.Player.PositionY)
+	debugText2 := fmt.Sprintf("Tile X %f Y %f -- %f", g.Player.PositionX/view.TileSize,
+		g.Player.PositionY/view.TileSize, triggerIndex)
+
+	ebitenutil.DebugPrintAt(screen, debugText, 0, screen.Bounds().Max.Y-32)
+	ebitenutil.DebugPrint(screen, debugText2)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

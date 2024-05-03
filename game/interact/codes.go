@@ -13,7 +13,6 @@ var InteractionMap map[int]InteractFunc
 func init() {
 	InteractionMap = make(map[int]InteractFunc)
 	InteractionMap[1] = interactLightSwitch
-	InteractionMap[90] = interactRoom
 }
 
 func interactLightSwitch(ti model.TileInteraction) {
@@ -27,8 +26,4 @@ func interactLightSwitch(ti model.TileInteraction) {
 		util.SwitchLightOn()
 		level.ReplaceTile(int(ti.PosX), int(ti.PosY), 67, 68)
 	}
-}
-
-func interactRoom(ti model.TileInteraction) {
-
 }

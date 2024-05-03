@@ -2,6 +2,7 @@ package interactables
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/game/level"
@@ -17,19 +18,11 @@ func HandlePlayerInteractions(p *entity.Player) {
 
 func HandlePlayerTriggers(p *entity.Player) {
 
-	code := level.GetTriggerAtPos(p.GetPositionX(), p.GetPositionY())
-
-	if code == 0 {
-		return
+	trigger := level.GetTriggerAtPos(p.GetPositionX(), p.GetPositionY())
+	if trigger != nil {
+		log.Println("Found trigger")
+		trigger()
 	}
-
-	it := model.TileInteraction{
-		PosX: 0,
-		PosY: 0,
-		Code: code,
-	}
-
-	Execute(p, it)
 }
 
 func findNearInteractables(p *entity.Player) []model.TileInteraction {

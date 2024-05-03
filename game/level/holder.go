@@ -12,7 +12,7 @@ var (
 	LevelMap       *[][]int
 	Interactables  []int
 	InteractionMap map[int]model.TileInteraction
-	Triggers       []int
+	Triggers       map[int]func()
 	LevelStatus    *Status
 	MaxLevelWidth  int
 	MaxLevelHeight int
@@ -48,7 +48,7 @@ func GetTileBottom(p *entity.Player, tileSize int) int {
 	return GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(tileSize), tileSize)
 }
 
-func GetTriggerAtPos(x, y float64) int {
+func GetTriggerAtPos(x, y float64) func() {
 
 	xPos := int(x) / view.TileSize
 	yPos := int(y) / view.TileSize
@@ -56,7 +56,7 @@ func GetTriggerAtPos(x, y float64) int {
 	width := MaxLevelWidth / view.TileSize
 
 	if xPos < 0 || yPos < 0 || xPos >= width || yPos*width+xPos >= len((*LevelMap)[0]) {
-		return 0
+		return nil
 	}
 
 	index := yPos*width + xPos
