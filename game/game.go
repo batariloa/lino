@@ -8,6 +8,7 @@ import (
 	interact "github.com/batariloa/lino/game/interact"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
+	"github.com/batariloa/lino/game/trigger"
 	"github.com/batariloa/lino/game/view"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -77,6 +78,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	ebitenutil.DebugPrintAt(screen, debugText, 0, screen.Bounds().Max.Y-32)
 	ebitenutil.DebugPrint(screen, debugText2)
+
+	trigger.HandleTransitionToBlack(screen)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {

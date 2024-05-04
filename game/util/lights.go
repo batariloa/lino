@@ -1,6 +1,8 @@
 package util
 
-import "github.com/batariloa/lino/game/level"
+import (
+	"github.com/batariloa/lino/game/level"
+)
 
 func SwitchLightOn() {
 

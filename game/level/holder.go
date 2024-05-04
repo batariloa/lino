@@ -8,6 +8,10 @@ import (
 	"github.com/batariloa/lino/game/view"
 )
 
+type Status struct {
+	LightOn *bool
+}
+
 var (
 	LevelMap       *[][]int
 	Interactables  []int
@@ -46,21 +50,6 @@ func GetTileTop(p *entity.Player, tileSize int) int {
 
 func GetTileBottom(p *entity.Player, tileSize int) int {
 	return GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(tileSize), tileSize)
-}
-
-func GetTriggerAtPos(x, y float64) func() {
-
-	xPos := int(x) / view.TileSize
-	yPos := int(y) / view.TileSize
-
-	width := MaxLevelWidth / view.TileSize
-
-	if xPos < 0 || yPos < 0 || xPos >= width || yPos*width+xPos >= len((*LevelMap)[0]) {
-		return nil
-	}
-
-	index := yPos*width + xPos
-	return Triggers[index]
 }
 
 func GetInteractionLeft(p *entity.Player, tileSize int) *model.TileInteraction {

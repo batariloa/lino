@@ -7,6 +7,7 @@ import (
 	"github.com/batariloa/lino/game/entity"
 	"github.com/batariloa/lino/game/level"
 	"github.com/batariloa/lino/game/model"
+	"github.com/batariloa/lino/game/trigger"
 	"github.com/batariloa/lino/game/view"
 )
 
@@ -18,7 +19,7 @@ func HandlePlayerInteractions(p *entity.Player) {
 
 func HandlePlayerTriggers(p *entity.Player) {
 
-	trigger := level.GetTriggerAtPos(p.GetPositionX(), p.GetPositionY())
+	trigger := trigger.GetTriggerAtPos(p.GetPositionX(), p.GetPositionY(), level.MaxLevelWidth)
 	if trigger != nil {
 		log.Println("Found trigger")
 		trigger()
@@ -55,5 +56,12 @@ func handleInteractCodes(p *entity.Player, its []model.TileInteraction) {
 	for _, it := range its {
 		it := it
 		Execute(p, it)
+	}
+}
+
+func Execute(p *entity.Player, ti model.TileInteraction) {
+	log.Printf("Trying to execute interactable with code %d", ti.Code)
+	if f, ok := InteractionMap[ti.Code]; ok && f != nil {
+		f(ti)
 	}
 }

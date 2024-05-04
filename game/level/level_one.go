@@ -1,5 +1,7 @@
 package level
 
+import "github.com/batariloa/lino/game/trigger"
+
 type LevelOne struct {
 }
 
@@ -109,5 +111,5 @@ func (*LevelOne) GenerateMap() {
 		TeleportToRoom(*Room2)
 	}
 
-	addTrigger(6, 12, TeleportToRoomFunc1)
+	trigger.AddTrigger(6, 12, MaxLevelWidth, TeleportToRoomFunc1)
 }
