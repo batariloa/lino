@@ -31,9 +31,7 @@ type Drawer struct {
 	OffsetY      float64
 }
 
-var (
-	tilesImage *ebiten.Image
-)
+var tilesImage *ebiten.Image
 
 func NewDrawer() *Drawer {
 	ra := animator.NewRainAnimator()
@@ -46,7 +44,6 @@ func NewDrawer() *Drawer {
 }
 
 func init() {
-
 	img, _, err := image.Decode(bytes.NewReader(resources.TileArtBytes))
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +51,7 @@ func init() {
 	tilesImage = ebiten.NewImageFromImage(img)
 }
 
-func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.LevelInfo) {
+func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.LevelDrawInfo) {
 	halfScreenWidth := float64(ScreenWidth / 2)
 	halfScreenHeight := float64(ScreenHeight / 2)
 
@@ -113,7 +110,6 @@ func drawTile(i, t, tileXCount, totalTileCount int, screen *ebiten.Image, d *Dra
 }
 
 func (d *Drawer) drawRainTile(i, tileXCount, totalTileCount int, screen *ebiten.Image) {
-
 	op := &ebiten.DrawImageOptions{}
 	op.GeoM.Translate(
 		float64((i%totalTileCount)*TileSize)-d.OffsetX,
@@ -128,7 +124,6 @@ func (d *Drawer) drawRainTile(i, tileXCount, totalTileCount int, screen *ebiten.
 }
 
 func (d *Drawer) DrawPlayerModel(screen *ebiten.Image, p *entity.Player) {
-
 	op := ebiten.DrawImageOptions{}
 	faceImage := p.GetVisual()
 

@@ -18,7 +18,6 @@ func init() {
 }
 
 func calcTriggerIndex(x, y, levelWidth int) int {
-
 	width := levelWidth / view.TileSize
 	index := y*width + x
 
@@ -26,7 +25,6 @@ func calcTriggerIndex(x, y, levelWidth int) int {
 }
 
 func AddTrigger(x, y, width int, triggerFunc func()) {
-
 	index := calcTriggerIndex(x, y, width)
 	Triggers[index] = triggerFunc
 }
@@ -43,6 +41,10 @@ func HandleTransitionToBlack(screen *ebiten.Image) {
 func StartTransitionToBlack() {
 	transitionAlpha = 0
 	transitionToBlack = true
+}
+
+func clearAllTriggers() {
+	Triggers = map[int]func(){}
 }
 
 func GetTriggerAtPos(xPixel, yPixel float64, levelWidth int) func() {

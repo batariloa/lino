@@ -28,6 +28,8 @@ func GetTileAtPos(x float64, y float64, tileSize int) int {
 
 	width := MaxLevelWidth / tileSize
 
+	log.Printf("Level map", LevelMap)
+
 	if xPos < 0 || yPos < 0 || xPos >= width || yPos*width+xPos >= len((*LevelMap)[0]) {
 		return 0
 	}
@@ -36,6 +38,7 @@ func GetTileAtPos(x float64, y float64, tileSize int) int {
 	index := yPos*width + xPos
 	return (*LevelMap)[0][index]
 }
+
 func GetTileLeft(p *entity.Player, tileSize int) int {
 	return GetTileAtPos(p.GetPositionX()-float64(tileSize), p.GetPositionY(), tileSize)
 }
@@ -63,7 +66,6 @@ func GetInteractionLeft(p *entity.Player, tileSize int) *model.TileInteraction {
 }
 
 func GetInteractionRight(p *entity.Player, tileSize int) *model.TileInteraction {
-
 	posX := p.GetPositionX() + p.GetBaseModelSize()
 	val := GetInteractionAtPos(posX, p.GetPositionY(), view.TileSize)
 	return &model.TileInteraction{
@@ -83,7 +85,6 @@ func GetInteractionTop(p *entity.Player, tileSize int) *model.TileInteraction {
 }
 
 func GetInteractionBottom(p *entity.Player, tileSize int) *model.TileInteraction {
-
 	val := GetInteractionAtPos(p.GetPositionX(), p.GetPositionY()+float64(tileSize), tileSize)
 	return &model.TileInteraction{
 		PosX: p.PositionX,

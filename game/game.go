@@ -20,8 +20,13 @@ type Game struct {
 }
 
 func NewGame(p *entity.Player, d *view.Drawer) *Game {
-
+	err := level.LoadLevel("bedroom")
 	level.NewLevelOne()
+
+	if err != nil {
+		fmt.Sprint("no level data", err.Error())
+		panic(err)
+	}
 
 	return &Game{
 		Player: p,
@@ -30,7 +35,6 @@ func NewGame(p *entity.Player, d *view.Drawer) *Game {
 }
 
 func (g *Game) Update() error {
-
 	interact.HandlePlayerTriggers(g.Player)
 
 	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
@@ -61,15 +65,17 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-
-	li := model.LevelInfo{
+	li := model.LevelDrawInfo{
 		MaxLevelWidth:  level.MaxLevelWidth,
 		MaxLevelHeight: level.MaxLevelHeight,
 		Level:          *level.LevelMap,
 	}
+
 	g.Drawer.DrawTiles(screen, g.Player, li)
 
 	width := level.MaxLevelWidth / view.TileSize
+
+	fmt.Print("Max width %d", width)
 	triggerIndex := g.Player.PositionY*float64(width) + g.Player.PositionX
 
 	debugText := fmt.Sprintf("Pixel X %f Y %f", g.Player.PositionX, g.Player.PositionY)

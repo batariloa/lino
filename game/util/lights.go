@@ -5,12 +5,11 @@ import (
 )
 
 func SwitchLightOn() {
-
 	size := len((*level.LevelMap)[0])
 	newLayer := make([]int, size)
 
 	for i := range (*level.LevelMap)[0] {
-		//dark shade
+		// dark shade
 		newLayer[i] = 399
 	}
 
@@ -18,7 +17,6 @@ func SwitchLightOn() {
 }
 
 func SwitchLightOff() {
-
 	if len(*level.LevelMap) > 0 {
 		*level.LevelMap = (*level.LevelMap)[:len(*level.LevelMap)-1]
 	}

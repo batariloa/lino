@@ -1,6 +1,6 @@
 package model
 
-type LevelInfo struct {
+type LevelDrawInfo struct {
 	Level          [][]int
 	MaxLevelWidth  int
 	MaxLevelHeight int

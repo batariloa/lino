@@ -8,7 +8,6 @@ import (
 var PrevEKeyState bool
 
 func MoveLeft(p *entity.Player, tileSize int) {
-
 	leftTile := level.GetTileAtPos(p.GetPositionX()-float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(leftTile)
 
@@ -19,7 +18,6 @@ func MoveLeft(p *entity.Player, tileSize int) {
 }
 
 func MoveRight(p *entity.Player, tileSize int) {
-
 	rightTile := level.GetTileAtPos(p.GetPositionX()+float64(p.GetBaseModelSize()), p.GetPositionY(), tileSize)
 	isNoPassTile := level.IsNoPassTile(rightTile)
 
@@ -30,7 +28,6 @@ func MoveRight(p *entity.Player, tileSize int) {
 }
 
 func MoveUp(p *entity.Player, tileSize int) {
-
 	topTile := level.GetTileAtPos(p.GetPositionX(), p.GetPositionY()-float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 
@@ -40,7 +37,6 @@ func MoveUp(p *entity.Player, tileSize int) {
 }
 
 func MoveDown(p *entity.Player, tileSize int) {
-
 	topTile := level.GetTileAtPos(p.GetPositionX(), p.GetPositionY()+float64(p.GetBaseModelSize()), tileSize)
 	isNoPassTile := level.IsNoPassTile(topTile)
 	if !isNoPassTile &&
