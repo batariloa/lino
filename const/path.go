@@ -1,18 +1,18 @@
-package artPath
+package constants
 
 import "path/filepath"
 
 var (
-	TileArt   string
-	FaceFront string
-	FaceLeft  string
-	FaceRight string
+	PathTileArt   string
+	PathFaceFront string
+	PathFaceLeft  string
+	PathFaceRight string
 )
 
 func init() {
 
-	TileArt = filepath.Join(".", "art", "tiles.png")
-	FaceFront = filepath.Join(".", "art", "face32-front.png")
-	FaceLeft = filepath.Join(".", "art", "face32-left.png")
-	FaceRight = filepath.Join(".", "art", "face32-right.png")
+	PathTileArt = filepath.Join(".", "art", "tiles.png")
+	PathFaceFront = filepath.Join(".", "art", "face32-front.png")
+	PathFaceLeft = filepath.Join(".", "art", "face32-left.png")
+	PathFaceRight = filepath.Join(".", "art", "face32-right.png")
 }

@@ -1,6 +1,9 @@
 package level
 
-import "github.com/batariloa/lino/game/trigger"
+import (
+	constants "github.com/batariloa/lino/const"
+	"github.com/batariloa/lino/game/trigger"
+)
 
 type LevelOne struct{}
 
@@ -47,8 +50,8 @@ func (*LevelOne) GenerateMap() {
 		},
 	}
 
-	MaxLevelWidth = 18 * 20
-	MaxLevelHeight = 13 * 20
+	MaxLevelWidth = 18 * constants.TilePixelSize
+	MaxLevelHeight = 13 * constants.TilePixelSize
 
 	TeleportToRoomFunc1 := func() {
 		TeleportToRoom(*Room2)

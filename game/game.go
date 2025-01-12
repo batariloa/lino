@@ -2,6 +2,7 @@ package game
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/batariloa/lino/game/controller"
 	"github.com/batariloa/lino/game/entity"
@@ -15,13 +16,13 @@ import (
 )
 
 type Game struct {
-	Player *entity.Player
-	Drawer *view.Drawer
+	Player       *entity.Player
+	Drawer       *view.Drawer
+	LevelManager *level.LevelManager
 }
 
-func NewGame(p *entity.Player, d *view.Drawer) *Game {
-	err := level.LoadLevel("bedroom")
-	level.NewLevelOne()
+func NewGame(p *entity.Player, d *view.Drawer, l *level.LevelManager) *Game {
+	err := l.LoadLevel("bedroom")
 
 	if err != nil {
 		fmt.Sprint("no level data", err.Error())
@@ -29,12 +30,15 @@ func NewGame(p *entity.Player, d *view.Drawer) *Game {
 	}
 
 	return &Game{
-		Player: p,
-		Drawer: d,
+		Player:       p,
+		Drawer:       d,
+		LevelManager: l,
 	}
 }
 
 func (g *Game) Update() error {
+
+	log.Println("Running update")
 	interact.HandlePlayerTriggers(g.Player)
 
 	eKeyIsPressed := ebiten.IsKeyPressed(ebiten.KeyE)
@@ -60,20 +64,28 @@ func (g *Game) Update() error {
 	}
 
 	controller.PrevEKeyState = eKeyIsPressed
+	log.Println("Running update end")
 
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
+
+	currentLevel := g.LevelManager.GetCurrentLevel()
+	if currentLevel == nil {
+		log.Println("No level loaded!")
+		return
+	}
+
 	li := model.LevelDrawInfo{
-		MaxLevelWidth:  level.MaxLevelWidth,
-		MaxLevelHeight: level.MaxLevelHeight,
-		Level:          *level.LevelMap,
+		MaxLevelWidth:  currentLevel.Width * view.TileSize,
+		MaxLevelHeight: currentLevel.Height * view.TileSize,
+		Level:          [][]int{currentLevel.Layers[0]}, // Wrap in an extra array, do we need this?
 	}
 
 	g.Drawer.DrawTiles(screen, g.Player, li)
 
-	width := level.MaxLevelWidth / view.TileSize
+	width := currentLevel.Width
 
 	fmt.Print("Max width %d", width)
 	triggerIndex := g.Player.PositionY*float64(width) + g.Player.PositionX

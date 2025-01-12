@@ -77,7 +77,7 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.Leve
 	tileXCount := w / TileSize
 	totalTileCount := li.MaxLevelWidth / TileSize
 
-	// Draw the first two layers.
+	// Draw the first two layers under player.
 	for layerIndex := 0; layerIndex < 2 && layerIndex < len(li.Level); layerIndex++ {
 		for i, t := range li.Level[layerIndex] {
 			drawTile(i, t, tileXCount, totalTileCount, screen, d)
@@ -86,7 +86,7 @@ func (d *Drawer) DrawTiles(screen *ebiten.Image, p *entity.Player, li model.Leve
 
 	d.DrawPlayerModel(screen, p)
 
-	// Draw the rest of the layers.
+	// Draw the rest of the layers above player.
 	for layerIndex := 2; layerIndex < len(li.Level); layerIndex++ {
 		for i, t := range li.Level[layerIndex] {
 			drawTile(i, t, tileXCount, totalTileCount, screen, d)

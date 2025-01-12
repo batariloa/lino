@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/batariloa/lino/const"
+	constants "github.com/batariloa/lino/const"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
@@ -18,7 +18,7 @@ var (
 
 func init() {
 	var err error
-	TileArtBytes, err = ioutil.ReadFile(artPath.TileArt)
+	TileArtBytes, err = ioutil.ReadFile(constants.PathTileArt)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -26,17 +26,17 @@ func init() {
 
 func LoadResources() error {
 	var err error
-	faceImageFront, _, err = ebitenutil.NewImageFromFile(artPath.FaceFront)
+	faceImageFront, _, err = ebitenutil.NewImageFromFile(constants.PathFaceFront)
 	if err != nil {
 		log.Printf("Error loading resources: %s", err)
 	}
 
-	faceImageLeft, _, err = ebitenutil.NewImageFromFile(artPath.FaceLeft)
+	faceImageLeft, _, err = ebitenutil.NewImageFromFile(constants.PathFaceLeft)
 	if err != nil {
 		log.Printf("Error loading resources: %s", err)
 	}
 
-	faceImageRight, _, err = ebitenutil.NewImageFromFile(artPath.FaceRight)
+	faceImageRight, _, err = ebitenutil.NewImageFromFile(constants.PathFaceRight)
 
 	if err != nil {
 		log.Printf("Error loading resources: %s", err)
